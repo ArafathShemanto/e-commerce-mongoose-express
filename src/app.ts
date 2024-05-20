@@ -1,19 +1,23 @@
-import { Request, Response } from "express"
+import express, { Application, Request, Response } from "express"
 import cors from "cors"
-const express = require('express')
-const app = express()
+import { productRoutes } from "./app/modules/products/product.route";
 
+const app: Application = express();
 // PERCERS HERE 
 app.use(express.json());
 app.use(cors())
 
 
-// ALL ROUTE HERE 
-app.get('/', (req: Request, res: Response) => {
-    console.log("hei bro")
+const getproduct = (req: Request, res: Response) => {
     res.send('Hello World!')
-})
+}
 
+// products routes 
+app.use('/api/products', productRoutes);
+
+
+// ALL ROUTE HERE 
+app.get('/', getproduct)
 
 
 
