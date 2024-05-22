@@ -10,11 +10,13 @@ const getProductsFromDB = async (searchTerm: string) => {
     const result = await ProductModel.find(filter).exec()
     return result
 }
+
 // CREATE PRODUCT
 const createProductIntoDB = async (data: IProduct) => {
     const result = await ProductModel.create(data)
     return result
 }
+
 // UPDATE PRODUCT
 const updateProductByID = async (productID: string, data: IProduct) => {
     const result = await ProductModel.findByIdAndUpdate(productID, data, { new: true })
@@ -27,6 +29,7 @@ const getProductByIDFromDB = async (productId: string) => {
     const result = await ProductModel.findById({ _id: productId })
     return result
 }
+
 // DELETE PRODUCT
 const deleteProductByIDFromDB = async (productId: string) => {
     console.log(productId, "productId is that")

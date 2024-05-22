@@ -77,7 +77,7 @@ const updateProduct = async (req: Request, res: Response) => {
 const getProducts = async (req: Request, res: Response) => {
     try {
         console.log(req.query.searchTerm, "query params")
-        const { searchTerm } = req.query
+        const { searchTerm } = req?.query
         const result = await ProductServices.getProductsFromDB(searchTerm as any)
         res.status(200).json({
             "success": true,

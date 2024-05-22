@@ -5,14 +5,15 @@ import { z } from "zod";
 
 const getOrders = async (req: Request, res: Response) => {
     try {
-        const result = await OrderServices.getOrderFromDB()
+        const { email } = req.query
+        const result = await OrderServices.getOrderFromDB(email as any)
         res.status(200).json({
             "success": true,
             "message": "Orders fetched successfully!",
             "data": result
         })
 
-    } catch (error:any) {
+    } catch (error: any) {
         res.status(400).json({
             success: false,
             message: "Something Went Wrong",
