@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { ProductServices } from "./product.service"
 import mongoose from "mongoose";
 
-
+// CREATE PRODUCT
 const createProduct = async (req: Request, res: Response) => {
     try {
         const product = req.body;
@@ -18,20 +18,35 @@ const createProduct = async (req: Request, res: Response) => {
     }
 }
 
-// updateProduct 
+// UPDATE PRODUCT 
 const updateProduct = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
         const product = req.body;
-        console.log(product, "updateProduct")
-        const result = await ProductServices.createProductIntoDB(product)
+
+        const result = await ProductServices.updateProductByID(productId, product)
+
         res.status(200).json({
             "success": true,
-            "message": "Product created successfully!",
+            "message": "Product updated successfully!",
             "data": result
         })
+
     } catch (error) {
-        console.log(error)
+
+        // Handle specific Error
+        if (error instanceof mongoose?.Error?.CastError) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid product ID format.',
+            });
+        }
+
+        // Handle all other errors
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while fetching the product.',
+        });
     }
 }
 
