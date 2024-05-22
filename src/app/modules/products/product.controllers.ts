@@ -57,15 +57,12 @@ const updateProduct = async (req: Request, res: Response) => {
         })
 
     } catch (error) {
-        console.log(error, "error")
         if (error instanceof z.ZodError) {
             return res.status(400).json({
                 success: false,
                 message: 'Validation error: ' + error.format(),
             });
         }
-
-        // Handle all other errors
         res.status(500).json({
             success: false,
             message: 'An error occurred while updating the product.',

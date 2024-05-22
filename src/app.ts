@@ -1,5 +1,5 @@
-import express, { Application, Request, Response } from "express"
 import cors from "cors"
+import express, { Application, NextFunction, Request, Response } from "express"
 import { productRoutes } from "./app/modules/products/product.route";
 import { orderRoutes } from "./app/modules/orders/order.route";
 
@@ -9,18 +9,31 @@ app.use(express.json());
 app.use(cors())
 
 
-const getproduct = (req: Request, res: Response) => {
-    res.send('Hello World!')
-}
+
+
+
 
 // products routes 
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
 
-// ALL ROUTE HERE 
-app.get('/', getproduct)
 
+// if route is not found 
+const notFoundHandler = (req: Request, res: Response, next: NextFunction) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found",
+    });
+};
+app.use(notFoundHandler);
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+    console.error(error.stack);
+    res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server Error',
+    });
+});
 
 
 export default app
