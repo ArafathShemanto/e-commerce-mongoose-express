@@ -10,7 +10,6 @@ const CreateOrderIntoDB = async (order: IOrder) => {
     return result
 }
 
-
 export const OrderServices = {
     getOrderFromDB,
     CreateOrderIntoDB

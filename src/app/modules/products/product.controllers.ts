@@ -21,8 +21,7 @@ const createProduct = async (req: Request, res: Response) => {
 // GET ALL PRODUCTS 
 const getProducts = async (req: Request, res: Response) => {
     try {
-        const product = req.body;
-        console.log(product, "i got the data")
+        console.log(req.query.searchTerm, "query params")
         const result = await ProductServices.getProductsFromDB()
         res.status(200).json({
             "success": true,

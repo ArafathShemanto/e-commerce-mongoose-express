@@ -1,13 +1,10 @@
-import mongoose from "mongoose";
-import { ProductServices } from "../products/product.service";
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
 
 const getOrders = async (req: Request, res: Response) => {
     try {
-        const orders = req.body;
-        const result = await OrderServices.getOrderFromDB()
 
+        const result = await OrderServices.getOrderFromDB()
         res.status(200).json({
             "success": true,
             "message": "Orders fetched successfully!",
