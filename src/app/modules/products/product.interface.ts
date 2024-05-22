@@ -10,7 +10,7 @@ export interface IInventory {
 
 export interface IProduct {
     name: string;
-    description: string;
+    description?: string;
     price: number;
     category: string;
     tags: string[];

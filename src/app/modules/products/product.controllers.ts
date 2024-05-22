@@ -1,20 +1,38 @@
+import { z } from 'zod';
 import { Request, Response } from "express"
 import { ProductServices } from "./product.service"
 import mongoose from "mongoose";
+import productSchema from "./product.validation";
 
 // CREATE PRODUCT
 const createProduct = async (req: Request, res: Response) => {
     try {
         const product = req.body;
-        console.log(product, "product created")
-        const result = await ProductServices.createProductIntoDB(product)
+        
+        const validatedProduct = productSchema.parse(product);
+        const result = await ProductServices.createProductIntoDB(validatedProduct)
+
         res.status(200).json({
             "success": true,
             "message": "Product created successfully!",
             "data": result
         })
-    } catch (error) {
-        console.log(error)
+
+    } catch (error: any) {
+        // ERROR HANDLING 
+        if (error instanceof z.ZodError) {
+            res.status(400).json({
+                success: false,
+                message: "Validation error",
+                errors: error.errors,
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'Something went wrong',
+                error: error,
+            });
+        }
     }
 }
 
