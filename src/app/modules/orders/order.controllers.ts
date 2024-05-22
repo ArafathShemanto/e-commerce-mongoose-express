@@ -3,11 +3,12 @@ import { OrderServices } from "./order.service";
 import { orderValidation } from "./order.validation";
 import { z } from "zod";
 
+// GET ORDERS
 const getOrders = async (req: Request, res: Response) => {
     try {
         const { email } = req.query
         const result = await OrderServices.getOrderFromDB(email as any)
-        console.log(result,"result")
+        console.log(result, "result")
         if (!result || result?.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -28,10 +29,19 @@ const getOrders = async (req: Request, res: Response) => {
         });
     }
 }
+// CREATE ORDER
 const createOrder = async (req: Request, res: Response) => {
     try {
         const order = req.body;
-        console.log(order, "orders create")
+        const { productId, quantity } = req.body;
+        console.log(productId, quantity)
+        
+        if (!productId || !quantity || quantity <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid request data',
+            })
+        }
 
         const validData = orderValidation.parse(order)
         const result = await OrderServices.CreateOrderIntoDB(validData)
