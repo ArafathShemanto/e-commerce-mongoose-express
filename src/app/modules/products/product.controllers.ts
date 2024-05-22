@@ -8,7 +8,7 @@ import productSchema from "./product.validation";
 const createProduct = async (req: Request, res: Response) => {
     try {
         const product = req.body;
-        
+
         const validatedProduct = productSchema.parse(product);
         const result = await ProductServices.createProductIntoDB(validatedProduct)
 
@@ -42,8 +42,9 @@ const updateProduct = async (req: Request, res: Response) => {
         const { productId } = req.params;
         const product = req.body;
 
-        const result = await ProductServices.updateProductByID(productId, product)
-
+        const validateddata = productSchema.parse(product);
+        const result = await ProductServices.updateProductByID(productId, validateddata)
+        
         res.status(200).json({
             "success": true,
             "message": "Product updated successfully!",
@@ -63,7 +64,7 @@ const updateProduct = async (req: Request, res: Response) => {
         // Handle all other errors
         res.status(500).json({
             success: false,
-            message: 'An error occurred while fetching the product.',
+            message: 'An error occurred while updating the product.',
         });
     }
 }
