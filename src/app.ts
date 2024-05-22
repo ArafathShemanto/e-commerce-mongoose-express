@@ -18,7 +18,9 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Ecommerce Backed with Express Mongoose')
+    res.status(200).json({
+        message : "Ecommerce Backed with Express Mongoose"
+    })
 })
 
 // if route is not found 
