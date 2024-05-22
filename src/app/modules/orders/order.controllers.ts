@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
+import { orderValidation } from "./order.validation";
+import { z } from "zod";
 
 const getOrders = async (req: Request, res: Response) => {
     try {
-
         const result = await OrderServices.getOrderFromDB()
         res.status(200).json({
             "success": true,
@@ -11,15 +12,21 @@ const getOrders = async (req: Request, res: Response) => {
             "data": result
         })
 
-    } catch (error) {
-        console.log(error)
+    } catch (error:any) {
+        res.status(400).json({
+            success: false,
+            message: "Something Went Wrong",
+            errors: error.errors,
+        });
     }
 }
 const createOrder = async (req: Request, res: Response) => {
     try {
         const order = req.body;
         console.log(order, "orders create")
-        const result = await OrderServices.CreateOrderIntoDB(order)
+
+        const validData = orderValidation.parse(order)
+        const result = await OrderServices.CreateOrderIntoDB(validData)
 
         res.status(200).json({
             "success": true,
@@ -27,8 +34,21 @@ const createOrder = async (req: Request, res: Response) => {
             "data": result
         })
 
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        // ERROR HANDLING 
+        if (error instanceof z.ZodError) {
+            res.status(400).json({
+                success: false,
+                message: "Validation error",
+                errors: error.errors,
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'Something went wrong',
+                error: error,
+            });
+        }
     }
 }
 

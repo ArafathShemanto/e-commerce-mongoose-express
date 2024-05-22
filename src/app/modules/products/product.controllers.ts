@@ -44,7 +44,12 @@ const updateProduct = async (req: Request, res: Response) => {
 
         const validateddata = productSchema.parse(product);
         const result = await ProductServices.updateProductByID(productId, validateddata)
-        
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product Not Found',
+            });
+        }
         res.status(200).json({
             "success": true,
             "message": "Product updated successfully!",
@@ -52,12 +57,11 @@ const updateProduct = async (req: Request, res: Response) => {
         })
 
     } catch (error) {
-
-        // Handle specific Error
-        if (error instanceof mongoose?.Error?.CastError) {
+        console.log(error, "error")
+        if (error instanceof z.ZodError) {
             return res.status(400).json({
                 success: false,
-                message: 'Invalid product ID format.',
+                message: 'Validation error: ' + error.format(),
             });
         }
 
@@ -73,14 +77,25 @@ const updateProduct = async (req: Request, res: Response) => {
 const getProducts = async (req: Request, res: Response) => {
     try {
         console.log(req.query.searchTerm, "query params")
-        const result = await ProductServices.getProductsFromDB()
+        const { searchTerm } = req.query
+        const result = await ProductServices.getProductsFromDB(searchTerm as any)
         res.status(200).json({
             "success": true,
             "message": "Products fetched successfully!",
             "data": result
         })
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        if (error instanceof mongoose?.Error?.CastError) {
+            return res.status(400).json({
+                success: false,
+                message: 'No Data Found',
+            });
+        }
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Something went wrong',
+            error: error,
+        });
     }
 }
 
@@ -132,14 +147,41 @@ const getProductByID = async (req: Request, res: Response) => {
 const deleteProductByID = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
-        const result = await ProductServices.deleteProductByIDFromDB(productId)
-        res.status(200).json({
-            "success": true,
-            "message": "Product Deleted successfully!",
-            "data": null
-        })
-    } catch (error) {
-        console.log(error)
+
+        if (!productId) {
+            return res.status(400).json({
+                success: false,
+                message: "Product ID is required",
+            });
+        }
+
+        // Attempt to delete the product from the database
+        const result = await ProductServices.deleteProductByIDFromDB(productId);
+
+        if (result) {
+            res.status(200).json({
+                success: true,
+                message: "Product deleted successfully!",
+                data: null
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: "Product not found",
+            });
+        }
+    } catch (error: any) {
+        if (error instanceof mongoose?.Error?.CastError) {
+            return res.status(400).json({
+                success: false,
+                message: 'Product Not found',
+            });
+        }
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Something went wrong',
+            error: error,
+        });
     }
 }
 

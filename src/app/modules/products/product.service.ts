@@ -2,8 +2,12 @@ import { IProduct } from "./product.interface"
 import { ProductModel } from "./product.model"
 
 // GET PRODUCTS
-const getProductsFromDB = async () => {
-    const result = await ProductModel.find()
+const getProductsFromDB = async (searchTerm: string) => {
+    const filter = searchTerm
+        ? { name: { $regex: searchTerm, $options: 'i' } }
+        : {};
+        console.log(filter, "filter")
+    const result = await ProductModel.find(filter).exec()
     return result
 }
 // CREATE PRODUCT
