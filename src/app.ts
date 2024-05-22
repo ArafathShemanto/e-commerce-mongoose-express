@@ -27,6 +27,9 @@ const notFoundHandler = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 app.use(notFoundHandler);
+app.get('/', (req, res) => {
+    res.send('Ecommerce Backed Express Mongoose')
+})
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     console.error(error.stack);
     res.status(500).json({
