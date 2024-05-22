@@ -17,7 +17,9 @@ app.use(cors())
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
-
+app.get('/', (req, res) => {
+    res.send('Ecommerce Backed with Express Mongoose')
+})
 
 // if route is not found 
 const notFoundHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -27,9 +29,7 @@ const notFoundHandler = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 app.use(notFoundHandler);
-app.get('/', (req, res) => {
-    res.send('Ecommerce Backed Express Mongoose')
-})
+
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     console.error(error.stack);
     res.status(500).json({
