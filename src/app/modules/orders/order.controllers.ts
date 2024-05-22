@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
 import { orderValidation } from "./order.validation";
 import { z } from "zod";
+import { ProductModel } from "../products/product.model";
 
 // GET ORDERS
 const getOrders = async (req: Request, res: Response) => {
@@ -35,14 +36,14 @@ const createOrder = async (req: Request, res: Response) => {
         const order = req.body;
         const { productId, quantity } = req.body;
         console.log(productId, quantity)
-        
+
         if (!productId || !quantity || quantity <= 0) {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid request data',
             })
         }
-
+        
         const validData = orderValidation.parse(order)
         const result = await OrderServices.CreateOrderIntoDB(validData)
 
