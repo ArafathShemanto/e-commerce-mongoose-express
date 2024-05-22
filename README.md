@@ -1,8 +1,8 @@
-<h1 align="left">👋 ADD PORT AND DATABASE URL TO RUN PROJECT </h1>
+<h3 align="left">👋 ADD PORT AND DATABASE URL TO RUN PROJECT </h3>
 
 <p align="left">PORT=</p>
 <p align="left">DATABASE_URL=</p>
 ###
 
-
-live link : https://assignment-two-ecom-express-mongoose.vercel.app/
+git repo  : https://github.com/ArafathShemanto/e-commerce-mongoose-express
+live link : https://ecommerce-backed-ecru.vercel.app/
