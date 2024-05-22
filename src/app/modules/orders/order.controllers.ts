@@ -7,7 +7,13 @@ const getOrders = async (req: Request, res: Response) => {
     try {
         const { email } = req.query
         const result = await OrderServices.getOrderFromDB(email as any)
-        
+        console.log(result,"result")
+        if (!result || result?.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found',
+            });
+        }
         res.status(200).json({
             "success": true,
             "message": "Orders fetched successfully!",

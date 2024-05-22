@@ -76,6 +76,12 @@ const getProducts = async (req: Request, res: Response) => {
         console.log(req.query.searchTerm, "query params")
         const { searchTerm } = req?.query
         const result = await ProductServices.getProductsFromDB(searchTerm as any)
+        if (!result || result?.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Products not found',
+            });
+        }
         res.status(200).json({
             "success": true,
             "message": "Products fetched successfully!",
