@@ -9,6 +9,11 @@ const createProductIntoDB = async (data: IProduct) => {
     const result = await ProductModel.create(data)
     return result
 }
+const updateProductByID = async (data: IProduct) => {
+    const result = await ProductModel.updateOne(data)
+    return result
+}
+
 const getProductByIDFromDB = async (productId: string) => {
     console.log(productId, "productId is that")
     const result = await ProductModel.findById({ _id: productId })
@@ -26,5 +31,6 @@ export const ProductServices = {
     createProductIntoDB,
     getProductsFromDB,
     getProductByIDFromDB,
-    deleteProductByIDFromDB
+    deleteProductByIDFromDB,
+    updateProductByID
 }

@@ -5,6 +5,7 @@ import { productController } from './product.controllers';
 const Router = express.Router()
 Router.get("/", productController.getProducts)
 Router.post("/", productController.createProduct)
+Router.put("/:productId", productController.updateProduct)
 Router.get("/:productId", productController.getProductByID)
 Router.delete("/:productId", productController.deleteProductByID)
 

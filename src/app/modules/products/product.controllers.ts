@@ -18,6 +18,23 @@ const createProduct = async (req: Request, res: Response) => {
     }
 }
 
+// updateProduct 
+const updateProduct = async (req: Request, res: Response) => {
+    try {
+        const { productId } = req.params;
+        const product = req.body;
+        console.log(product, "updateProduct")
+        const result = await ProductServices.createProductIntoDB(product)
+        res.status(200).json({
+            "success": true,
+            "message": "Product created successfully!",
+            "data": result
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 // GET ALL PRODUCTS 
 const getProducts = async (req: Request, res: Response) => {
     try {
@@ -37,7 +54,6 @@ const getProducts = async (req: Request, res: Response) => {
 const getProductByID = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
-        console.log(productId, "productId")
 
         if (!productId) {
             return res.status(400).json({
@@ -97,5 +113,6 @@ export const productController = {
     createProduct,
     getProducts,
     getProductByID,
-    deleteProductByID
+    deleteProductByID,
+    updateProduct
 }
